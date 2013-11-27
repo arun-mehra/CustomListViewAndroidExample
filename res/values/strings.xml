@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CustomListViewExample</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+	<string name="student_name">John Rambo</string>
+	<string name="roll_no">ic-18</string>
+	<string name="SName">Student Name</string>
+	<string name="SRollNo">Roll No.:- </string>
+</resources>
