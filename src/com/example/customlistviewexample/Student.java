@@ -1,32 +1,32 @@
 package com.example.customlistviewexample;
 
-import java.util.Comparator;
 
 public class Student {
-	private String StudentName;
-	private String StudentRollNo;
-	private int StudentImage;
+	private String studentName;
+	private String studentRollNo;
+	private int studentImage;
+	
 
 	public Student() {
 
 	}
 
-	public Student(String StudentName, String StudentRollNo, int StudentImage) {
-		this.StudentName = StudentName;
-		this.StudentRollNo = StudentRollNo;
-		this.StudentImage = StudentImage;
+	public Student(String studentName, String studentRollNo, int studentImage) {
+		this.studentName = studentName;
+		this.studentRollNo = studentRollNo;
+		this.studentImage = studentImage;
 	}
 
 	public String getStudentName() {
-		return StudentName;
+		return studentName;
 	}
 
 	public String getStudentRollNo() {
-		return StudentRollNo;
+		return studentRollNo;
 	}
 
 	public int getStudentImage() {
-		return StudentImage;
+		return studentImage;
 	}
 
 }

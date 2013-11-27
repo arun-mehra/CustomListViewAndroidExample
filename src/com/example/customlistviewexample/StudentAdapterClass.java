@@ -1,7 +1,6 @@
 package com.example.customlistviewexample;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,50 +13,62 @@ import android.widget.TextView;
 public class StudentAdapterClass extends ArrayAdapter<Student> {
 
 	private Context mContext;
-	private ArrayList<Student> StudentObjects;
+	private LayoutInflater myInflater;
 
 	public StudentAdapterClass(Context context, int textViewResourceId,
 			ArrayList<Student> objects) {
 		super(context, textViewResourceId, objects);
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
-		this.StudentObjects = objects;
 
+	}
+
+	@Override
+	public Student getItem(int position) {
+		// TODO Auto-generated method stub
+		return super.getItem(position);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		View v = convertView;
+		final ViewHolder holder;
 
-		if (v == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext()
+		if (convertView == null) {
+
+			holder = new ViewHolder();
+			myInflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.some_layout, null);
-		}
+			convertView = myInflater.inflate(R.layout.some_layout, null);
 
-		Student i = StudentObjects.get(position);
-
-		if (i != null) {
-
-			TextView StudentName = (TextView) v
-					.findViewById(R.id.tvStudentName);
-			TextView StudentRollNo = (TextView) v.findViewById(R.id.tvRollNo);
-			ImageView StudentImage = (ImageView) v
+			holder.studentImage = (ImageView) convertView
 					.findViewById(R.id.imgStudent);
-
-			if (StudentName != null) {
-				StudentName.setText(i.getStudentName());
-			}
-			if (StudentRollNo != null) {
-				StudentRollNo.setText(i.getStudentRollNo());
-			}
-			if (StudentImage != null) {
-				StudentImage.setImageResource(i.getStudentImage());
-			}
+			holder.studentName = (TextView) convertView
+					.findViewById(R.id.tvStudentName);
+			holder.studentRollNo = (TextView) convertView
+					.findViewById(R.id.tvRollNo);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
 		}
+		if (getItem(position) != null) {
 
-		return v;
+			holder.studentName.setText(getItem(position).getStudentName());
+			holder.studentRollNo.setText(getItem(position).getStudentRollNo());
+			holder.studentImage.setImageResource(getItem(position)
+					.getStudentImage());
+		}
+		return convertView;
+	}
 
+	public class ViewHolder {
+		public ImageView studentImage;
+		public TextView studentName;
+		public TextView studentRollNo;
+	}
+
+	public void customDestory() {
+		mContext = null;
+		myInflater = null;
 	}
 
 }
