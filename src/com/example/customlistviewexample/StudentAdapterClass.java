@@ -1,93 +1,63 @@
 package com.example.customlistviewexample;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class StudentAdapterClass extends BaseAdapter {
+public class StudentAdapterClass extends ArrayAdapter<Student> {
+
 	private Context mContext;
-	private String[] StudentName;
-	private String[] StudentRollNo;
-	private LayoutInflater myInflater;
-	private Bitmap[] bitmap;
+	private ArrayList<Student> StudentObjects;
 
-	public StudentAdapterClass(Context conx, String[] StudentName,
-			String[] StudentRollNo, Bitmap[] StudentImage) {
-		this.mContext = conx;
-		this.StudentName = StudentName;
-		this.StudentRollNo = StudentRollNo;
-		this.bitmap = StudentImage;
+	public StudentAdapterClass(Context context, int textViewResourceId,
+			ArrayList<Student> objects) {
+		super(context, textViewResourceId, objects);
+		// TODO Auto-generated constructor stub
+		this.mContext = context;
+		this.StudentObjects = objects;
+
 	}
 
-	public int getCount() {
-		if (StudentRollNo.length != 0) {
-			return StudentRollNo.length;
-		} else {
-			return 0;
-		}
-	}
-
-	public Object getItem(int position) {
-		return position;
-	}
-
-	public long getItemId(int position) {
-		return position;
-	}
-
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		final ViewHolder holder;
 
-		if (convertView == null) {
+		View v = convertView;
 
-			holder = new ViewHolder();
-			myInflater = (LayoutInflater) mContext
+		if (v == null) {
+			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = myInflater.inflate(R.layout.some_layout, null);
-
-			holder.StudentImage = (ImageView) convertView
-					.findViewById(R.id.imgStudent);
-			holder.StudentName = (TextView) convertView
-					.findViewById(R.id.tvStudentName);
-			holder.StudentRollNo = (TextView) convertView
-					.findViewById(R.id.tvRollNo);
-
-			convertView.setTag(holder);
-
-		} else {
-			holder = (ViewHolder) convertView.getTag();
+			v = inflater.inflate(R.layout.some_layout, null);
 		}
-		if (StudentRollNo != null && StudentRollNo[position] != null) {
 
-			holder.StudentName.setText(StudentName[position]);
-			holder.StudentRollNo.setText(StudentRollNo[position]);
-			if (position <= 11) {
-				holder.StudentImage.setImageBitmap(bitmap[position]);
+		Student i = StudentObjects.get(position);
 
-			} else {
-				holder.StudentImage.setImageResource(R.drawable.ic_launcher);
+		if (i != null) {
+
+			TextView StudentName = (TextView) v
+					.findViewById(R.id.tvStudentName);
+			TextView StudentRollNo = (TextView) v.findViewById(R.id.tvRollNo);
+			ImageView StudentImage = (ImageView) v
+					.findViewById(R.id.imgStudent);
+
+			if (StudentName != null) {
+				StudentName.setText(i.getStudentName());
+			}
+			if (StudentRollNo != null) {
+				StudentRollNo.setText(i.getStudentRollNo());
+			}
+			if (StudentImage != null) {
+				StudentImage.setImageResource(i.getStudentImage());
 			}
 		}
-		return convertView;
-	}
 
-	public class ViewHolder {
-		public ImageView StudentImage;
-		public TextView StudentName;
-		public TextView StudentRollNo;
+		return v;
 
-	}
-
-	public void CustomDestoryAdapter() {
-		myInflater = null;
-		mContext = null;
 	}
 
 }
