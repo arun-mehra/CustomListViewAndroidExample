@@ -1,13 +1,17 @@
 package com.example.customlistviewexample;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ListView;
 
-public class MainActivity extends Activity {
+import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+import com.j256.ormlite.dao.Dao;
+
+public class MainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	// Student List
 	ArrayList<Student> studentList = new ArrayList<Student>();
@@ -17,26 +21,24 @@ public class MainActivity extends Activity {
 
 	// list view variable
 	private ListView myListView;
-
-	// Database Helper
-	private DataHelperClass helper;
+	
+	ArrayList<Student> list;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		Dao<Student, Void> simpleDao;
+		try {
+			simpleDao = getHelper().getDao();
+			list = (ArrayList<Student>) simpleDao.queryForAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		myListView = (ListView) findViewById(R.id.lvStudent);
-
-		helper = new DataHelperClass(getApplicationContext());
-
-		Student myStudent = new Student("Arun", "IC-03", R.drawable.ic_launcher);
-
-		helper.addData(myStudent);
-
-		myStudent = new Student("John", "IC-63", R.drawable.ic_launcher);
-
-		helper.addData(myStudent);
+		myListView = (ListView) findViewById(R.id.lvStudent);		
 
 		/*
 		 * studentList.add(new Student("Arun", "IC-03",
@@ -58,7 +60,7 @@ public class MainActivity extends Activity {
 		 */
 
 		myADC = new StudentAdapterClass(MainActivity.this,
-				R.layout.some_layout, helper.GetData());
+				R.layout.some_layout, list);
 
 		// display the list.
 		myListView.setAdapter(myADC);
