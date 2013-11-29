@@ -2,16 +2,16 @@ package com.example.customlistviewexample;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ListView;
 
-import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
-public class MainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
+public class MainActivity extends Activity {
 
 	// Student List
 	ArrayList<Student> studentList = new ArrayList<Student>();
@@ -21,14 +21,16 @@ public class MainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	// list view variable
 	private ListView myListView;
-	
+
 	ArrayList<Student> list;
+
+	private DatabaseHelper databaseHelper = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		Dao<Student, Void> simpleDao;
 		try {
 			simpleDao = getHelper().getDao();
@@ -38,26 +40,7 @@ public class MainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			e.printStackTrace();
 		}
 
-		myListView = (ListView) findViewById(R.id.lvStudent);		
-
-		/*
-		 * studentList.add(new Student("Arun", "IC-03",
-		 * R.drawable.ic_launcher)); studentList.add(new Student("Nikhil",
-		 * "IC-13", R.drawable.ic_launcher)); studentList.add(new
-		 * Student("Rony", "IC-23", R.drawable.ic_launcher));
-		 * studentList.add(new Student("Clouds", "IC-33",
-		 * R.drawable.ic_launcher)); studentList.add(new Student("Rajeev",
-		 * "IC-43", R.drawable.ic_launcher)); studentList.add(new
-		 * Student("Shri", "IC-53", R.drawable.ic_launcher));
-		 * studentList.add(new Student("John", "IC-63",
-		 * R.drawable.ic_launcher)); studentList.add(new Student("Rambo",
-		 * "IC-73", R.drawable.ic_launcher)); studentList.add(new
-		 * Student("Dark", "IC-83", R.drawable.ic_launcher));
-		 * studentList.add(new Student("Knight", "IC-93",
-		 * R.drawable.ic_launcher)); studentList.add(new Student("James",
-		 * "IC-103", R.drawable.ic_launcher)); studentList.add(new
-		 * Student("Gosling", "IC-113", R.drawable.ic_launcher));
-		 */
+		myListView = (ListView) findViewById(R.id.lvStudent);
 
 		myADC = new StudentAdapterClass(MainActivity.this,
 				R.layout.some_layout, list);
@@ -73,5 +56,22 @@ public class MainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		if (databaseHelper != null) {
+			OpenHelperManager.releaseHelper();
+			databaseHelper = null;
+		}
+	}
+	
+	private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+                databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+}
 
 }
