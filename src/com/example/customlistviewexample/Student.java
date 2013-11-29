@@ -1,9 +1,17 @@
 package com.example.customlistviewexample;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "student")
 public class Student {
+	@DatabaseField(canBeNull = false)
 	private String studentName;
+	
+	@DatabaseField(canBeNull = false)
 	private String studentRollNo;
+	
+	@DatabaseField(canBeNull = false)
 	private int studentImage;
 	
 
