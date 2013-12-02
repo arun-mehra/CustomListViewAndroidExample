@@ -1,15 +1,13 @@
 package com.example.customlistviewexample;
 
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
-
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.dao.Dao;
 
 public class MainActivity extends Activity {
 
@@ -24,30 +22,54 @@ public class MainActivity extends Activity {
 
 	ArrayList<Student> list;
 
-	private DatabaseHelper databaseHelper = null;
+	// private MyDatabase databaseHelper = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Dao<Student, Void> simpleDao;
+		DatabaseHelper myDB = new DatabaseHelper(MainActivity.this);
+
 		try {
-			simpleDao = getHelper().getDao();
-			list = (ArrayList<Student>) simpleDao.queryForAll();
-		} catch (SQLException e) {
+			myDB.createDataBase();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			Log.d("onCreateDataBase",
+					"Error while creating database MainActivity");
 			e.printStackTrace();
 		}
+		
+		//myDB.insertIntoStudentTable(1, "Arun", "IC-18", R.drawable.ic_launcher, "P101");
+		
+		myDB.showData();
+
+		/*if (myDB.insertIntoStudentTable(1, "Physics", "P101")) {
+			Toast.makeText(this, "Insert successful", Toast.LENGTH_SHORT)
+					.show();
+		} else {
+			Toast.makeText(this, "Unable to insert record", Toast.LENGTH_SHORT)
+					.show();
+		}*/
+		
+		
+		/*
+		 * Dao<Student, Void> simpleDao; try { // simpleDao =
+		 * getHelper().getDaoStudent(); list = (ArrayList<Student>)
+		 * simpleDao.queryForAll(); } catch (SQLException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 */
 
 		myListView = (ListView) findViewById(R.id.lvStudent);
 
 		myADC = new StudentAdapterClass(MainActivity.this,
 				R.layout.some_layout, list);
 
-		// display the list.
-		myListView.setAdapter(myADC);
-
+		/*
+		 * if (myADC.isEmpty()) { Toast.makeText(MainActivity.this,
+		 * "No records found", Toast.LENGTH_SHORT).show(); } else {
+		 * myListView.setAdapter(myADC); }
+		 */
 	};
 
 	@Override
@@ -61,17 +83,16 @@ public class MainActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 
-		if (databaseHelper != null) {
-			OpenHelperManager.releaseHelper();
-			databaseHelper = null;
-		}
+		/*
+		 * if (databaseHelper != null) { OpenHelperManager.releaseHelper();
+		 * databaseHelper = null; }
+		 */
 	}
-	
-	private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-                databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
-}
+
+	/*
+	 * private MyDatabase getHelper() { if (databaseHelper == null) {
+	 * databaseHelper = OpenHelperManager.getHelper(this, MyDatabase.class); }
+	 * return databaseHelper; }
+	 */
 
 }
